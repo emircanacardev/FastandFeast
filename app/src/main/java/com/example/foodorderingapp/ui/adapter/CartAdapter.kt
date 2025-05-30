@@ -16,6 +16,7 @@ class CartAdapter(
     private val items: List<CartItem>,
     private val onDeleteClick: (Int) -> Unit
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+
     inner class CartViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.textCartName)
         val quantity: TextView = view.findViewById(R.id.textCartQuantity)
@@ -33,15 +34,24 @@ class CartAdapter(
 
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val item = items[position]
+
         holder.name.text = item.yemek_adi
         holder.quantity.text = "${item.yemek_siparis_adet} pcs"
-        holder.price.text = "₺${item.yemek_fiyat * item.yemek_siparis_adet}"
+
+        // Fiyat ve adet String olduğu için önce Int'e çeviriyoruz
+        val adet = item.yemek_siparis_adet.toIntOrNull() ?: 0
+        val fiyat = item.yemek_fiyat.toIntOrNull() ?: 0
+        holder.price.text = "₺${fiyat * adet}"
+
         Glide.with(holder.itemView.context)
             .load("http://kasimadalan.pe.hu/yemekler/resimler/${item.yemek_resim_adi}")
             .into(holder.image)
 
         holder.deleteBtn.setOnClickListener {
-            onDeleteClick(item.sepet_yemek_id)
+            val sepetYemekId = item.sepet_yemek_id.toIntOrNull()
+            if (sepetYemekId != null) {
+                onDeleteClick(sepetYemekId)
+            }
         }
     }
 }

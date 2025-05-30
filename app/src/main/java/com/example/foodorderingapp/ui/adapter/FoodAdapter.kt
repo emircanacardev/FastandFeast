@@ -9,16 +9,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodorderingapp.R
 import com.example.foodorderingapp.data.model.Food
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class FoodAdapter(
-    private val foodList: List<Food>,
-    private val onItemClick: (Food) -> Unit
+    private val items: List<Food>,
+    private val onItemClick: (Food) -> Unit,
+    private val onAddToCartClick: (Food) -> Unit
 ) : RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
-    class FoodViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val foodImage: ImageView = itemView.findViewById(R.id.imgFood)
-        val foodName: TextView = itemView.findViewById(R.id.txtFoodName)
-        val foodPrice: TextView = itemView.findViewById(R.id.txtFoodPrice)
+    inner class FoodViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val imgFood: ImageView = view.findViewById(R.id.imgFood)
+        val txtFoodName: TextView = view.findViewById(R.id.txtFoodName)
+        val txtFoodPrice: TextView = view.findViewById(R.id.txtFoodPrice)
+        val fabAddToCart: FloatingActionButton = view.findViewById(R.id.fabAddToCart)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
@@ -26,16 +29,24 @@ class FoodAdapter(
         return FoodViewHolder(view)
     }
 
+    override fun getItemCount(): Int = items.size
+
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
-        val food = foodList[position]
-        holder.foodName.text = food.yemek_adi
-        holder.foodPrice.text = "${food.yemek_fiyat} ₺"
+        val food = items[position]
+
+        holder.txtFoodName.text = food.yemek_adi
+        holder.txtFoodPrice.text = "₺${food.yemek_fiyat}"
+
         Glide.with(holder.itemView.context)
             .load("http://kasimadalan.pe.hu/yemekler/resimler/${food.yemek_resim_adi}")
-            .into(holder.foodImage)
+            .into(holder.imgFood)
 
-        holder.itemView.setOnClickListener { onItemClick(food) }
+        holder.itemView.setOnClickListener {
+            onItemClick(food)
+        }
+
+        holder.fabAddToCart.setOnClickListener {
+            onAddToCartClick(food)
+        }
     }
-
-    override fun getItemCount(): Int = foodList.size
 }

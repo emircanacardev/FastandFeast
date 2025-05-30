@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.foodorderingapp.R
+import com.example.foodorderingapp.data.model.Food
 import com.example.foodorderingapp.data.remote.RetrofitClient
 import com.example.foodorderingapp.databinding.FragmentHomeBinding
 import com.example.foodorderingapp.ui.adapter.FoodAdapter
@@ -43,21 +44,47 @@ class HomeFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.api.getAllFoods()
-                Log.w("DENEME", "$response")
 
-                binding.recyclerFoods.adapter = FoodAdapter(response.yemekler) { food ->
-                    val bundle = Bundle().apply {
-                        putSerializable("selectedFood", food)
+                binding.recyclerFoods.adapter = FoodAdapter(
+                    response.yemekler,
+                    onItemClick = { food ->
+                        val bundle = Bundle().apply {
+                            putSerializable("selectedFood", food)
+                        }
+                        findNavController().navigate(R.id.detailFragment, bundle)
+                    },
+                    onAddToCartClick = { food ->
+                        addToCart(food)
                     }
-                    findNavController().navigate(R.id.detailFragment, bundle)
-                }
+                )
 
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Failed to fetch data", Toast.LENGTH_SHORT).show()
-                Log.w("DENEME", "$e")
             }
         }
     }
+
+    private fun addToCart(food: Food) {
+        lifecycleScope.launch {
+            try {
+                val response = RetrofitClient.api.addToCart(
+                    yemekAdi = food.yemek_adi,
+                    yemekResimAdi = food.yemek_resim_adi,
+                    yemekFiyat = food.yemek_fiyat.toIntOrNull() ?: 0,
+                    yemekAdet = 1,
+                    kullaniciAdi = "emircanacar"
+                )
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "Added to cart!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Failed to add to cart!", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
 
     private fun calculateNoOfColumns(context: Context, columnWidthDp: Float): Int {
         val displayMetrics = context.resources.displayMetrics
@@ -69,4 +96,5 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

@@ -1,6 +1,7 @@
 package com.example.foodorderingapp.ui.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -52,8 +53,13 @@ class CartFragment : Fragment() {
     private fun loadCart() {
         lifecycleScope.launch {
             try {
-                val response = RetrofitClient.api.getCart("emircan")
+                val response = RetrofitClient.api.getCart("emircanacar")
+                Log.w("LOADCART", "1")
+
                 cartItems.clear()
+
+                Log.w("LOADCART", "2")
+
                 cartItems.addAll(response.sepet_yemekler ?: emptyList())
                 cartAdapter.notifyDataSetChanged()
             } catch (e: Exception) {
@@ -65,7 +71,7 @@ class CartFragment : Fragment() {
     private fun removeFromCart(sepet_yemek_id: Int) {
         lifecycleScope.launch {
             try {
-                RetrofitClient.api.deleteCartItem(sepet_yemek_id, "emircan")
+                RetrofitClient.api.deleteCartItem(sepet_yemek_id, "emircanacar")
                 Toast.makeText(requireContext(), "Item removed", Toast.LENGTH_SHORT).show()
                 loadCart()
             } catch (e: Exception) {

@@ -21,7 +21,7 @@ interface FoodApi {
     ): Response<Void>
 
     @FormUrlEncoded
-    @POST("yemekler/sepetiGetir.php")
+    @POST("yemekler/sepettekiYemekleriGetir.php")
     suspend fun getCart(
         @Field("kullanici_adi") kullaniciAdi: String
     ): CartResponse
