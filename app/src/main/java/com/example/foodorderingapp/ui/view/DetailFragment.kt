@@ -2,14 +2,14 @@ package com.example.foodorderingapp.ui.view
 
 import android.os.Bundle
 import android.view.*
-import android.widget.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.foodorderingapp.R
 import com.example.foodorderingapp.data.model.Food
 import com.example.foodorderingapp.data.remote.RetrofitClient
+import com.example.foodorderingapp.databinding.FragmentDetailBinding
 import kotlinx.coroutines.launch
 
 class DetailFragment : Fragment() {
@@ -17,15 +17,8 @@ class DetailFragment : Fragment() {
     private lateinit var selectedFood: Food
     private var quantity = 1
 
-    private lateinit var txtName: TextView
-    private lateinit var txtPrice: TextView
-    private lateinit var txtQuantity: TextView
-    private lateinit var txtTotalPrice: TextView
-    private lateinit var imgFood: ImageView
-    private lateinit var btnAddToCart: Button
-    private lateinit var btnDecrease: View
-    private lateinit var btnIncrease: View
-    private lateinit var btnClose: View
+    private var _binding: FragmentDetailBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,62 +31,50 @@ class DetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_detail, container, false)
-
-        txtName = view.findViewById(R.id.txtDetailName)
-        txtPrice = view.findViewById(R.id.txtDetailPrice)
-        txtQuantity = view.findViewById(R.id.textViewQuantity)
-        txtTotalPrice = view.findViewById(R.id.textViewQuantityPrice)
-        imgFood = view.findViewById(R.id.imgDetailFood)
-        btnAddToCart = view.findViewById(R.id.btnAddToCart)
-        btnDecrease = view.findViewById(R.id.fabDecrease)
-        btnIncrease = view.findViewById(R.id.fabIncrease)
-        btnClose = view.findViewById(R.id.fabClose)
-
+        _binding = FragmentDetailBinding.inflate(inflater, container, false)
         setupUI()
         setupListeners()
-
-        return view
+        return binding.root
     }
 
     private fun setupUI() {
-        txtName.text = selectedFood.yemek_adi
-        txtPrice.text = "₺ ${selectedFood.yemek_fiyat}"
-        txtQuantity.text = quantity.toString()
+        binding.txtDetailName.text = selectedFood.yemek_adi
+        binding.txtDetailPrice.text = "₺ ${selectedFood.yemek_fiyat}"
+        binding.textViewQuantity.text = quantity.toString()
         updateTotalPrice()
 
         Glide.with(requireContext())
             .load("http://kasimadalan.pe.hu/yemekler/resimler/${selectedFood.yemek_resim_adi}")
-            .into(imgFood)
+            .into(binding.imgDetailFood)
     }
 
     private fun setupListeners() {
-        btnDecrease.setOnClickListener {
+        binding.fabDecrease.setOnClickListener {
             if (quantity > 1) {
                 quantity--
-                txtQuantity.text = quantity.toString()
+                binding.textViewQuantity.text = quantity.toString()
                 updateTotalPrice()
             }
         }
 
-        btnIncrease.setOnClickListener {
+        binding.fabIncrease.setOnClickListener {
             quantity++
-            txtQuantity.text = quantity.toString()
+            binding.textViewQuantity.text = quantity.toString()
             updateTotalPrice()
         }
 
-        btnAddToCart.setOnClickListener {
+        binding.btnAddToCart.setOnClickListener {
             addToCart()
         }
 
-        btnClose.setOnClickListener {
+        binding.fabClose.setOnClickListener {
             findNavController().popBackStack()
         }
     }
 
     private fun updateTotalPrice() {
         val total = selectedFood.yemek_fiyat.toIntOrNull()?.times(quantity) ?: 0
-        txtTotalPrice.text = "₺ $total"
+        binding.textViewQuantityPrice.text = "₺ $total"
     }
 
     private fun addToCart() {
@@ -104,7 +85,7 @@ class DetailFragment : Fragment() {
                     yemekResimAdi = selectedFood.yemek_resim_adi,
                     yemekFiyat = selectedFood.yemek_fiyat.toInt(),
                     yemekAdet = quantity,
-                    kullaniciAdi = "emircanacar" // KULLANICI ADI
+                    kullaniciAdi = "emircanacar"
                 )
                 if (response.isSuccessful) {
                     Toast.makeText(requireContext(), "Added to cart!", Toast.LENGTH_SHORT).show()
@@ -117,4 +98,8 @@ class DetailFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

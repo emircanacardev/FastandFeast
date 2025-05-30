@@ -14,11 +14,13 @@ import com.example.foodorderingapp.databinding.FragmentCartBinding
 import com.example.foodorderingapp.ui.adapter.CartAdapter
 import kotlinx.coroutines.launch
 
-class CartFragment : Fragment() {private var _binding: FragmentCartBinding? = null
+class CartFragment : Fragment() {
+
+    private var _binding: FragmentCartBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var cartAdapter: CartAdapter
-    private var cartItems = mutableListOf<CartItem>()
+    private val cartItems = mutableListOf<CartItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,16 +31,22 @@ class CartFragment : Fragment() {private var _binding: FragmentCartBinding? = nu
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.recyclerCart.layoutManager = LinearLayoutManager(requireContext())
-        cartAdapter = CartAdapter(cartItems, ::removeFromCart)
-        binding.recyclerCart.adapter = cartAdapter
+        super.onViewCreated(view, savedInstanceState)
 
+        setupRecyclerView()
         loadCart()
+
+        binding.fabClose.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setupRecyclerView() {
+        binding.recyclerCart.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            cartAdapter = CartAdapter(cartItems, ::removeFromCart)
+            adapter = cartAdapter
+        }
     }
 
     private fun loadCart() {
@@ -46,7 +54,7 @@ class CartFragment : Fragment() {private var _binding: FragmentCartBinding? = nu
             try {
                 val response = RetrofitClient.api.getCart("emircan")
                 cartItems.clear()
-                cartItems.addAll(response.sepet_yemekler)
+                cartItems.addAll(response.sepet_yemekler ?: emptyList())
                 cartAdapter.notifyDataSetChanged()
             } catch (e: Exception) {
                 Toast.makeText(requireContext(), "Cart could not be loaded", Toast.LENGTH_SHORT).show()
@@ -66,4 +74,8 @@ class CartFragment : Fragment() {private var _binding: FragmentCartBinding? = nu
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
