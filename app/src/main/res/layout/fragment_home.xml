@@ -50,42 +50,41 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbarLogo"
         app:spanCount="2" />
 
-    <LinearLayout android:id="@+id/customBottomBar"
+    <LinearLayout
+        android:id="@+id/customBottomBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/mainRed"
+        android:gravity="center"
         android:orientation="horizontal"
-        android:background="@color/favoriteRed"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center">
+        app:layout_constraintStart_toStartOf="parent">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnHome"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Home"
-        android:textColor="@color/white"
-        android:icon="@drawable/home_icon"
-        android:iconTint="@color/white"
-        android:backgroundTint="@color/favoriteRed"
-        app:iconGravity="textStart"
-        style="@style/Widget.MaterialComponents.Button.TextButton" />
+        <Button
+            android:id="@+id/btnHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/favoriteRed"
+            android:text="Home"
+            android:textAlignment="center"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/home_icon"
+            app:iconGravity="top" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnCart"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Cart"
-        android:textColor="@color/white"
-        android:icon="@drawable/basket_icon"
-        android:iconTint="@color/white"
-        android:backgroundTint="@color/favoriteRed"
-        app:iconGravity="textStart"
-        style="@style/Widget.MaterialComponents.Button.TextButton" />
+        <Button
+            android:id="@+id/btnCart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/mainRed"
+            android:text="Cart"
+            android:textAlignment="center"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/basket_icon"
+            app:iconGravity="top" />
 
     </LinearLayout>
 
