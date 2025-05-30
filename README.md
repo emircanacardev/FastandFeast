@@ -5,7 +5,7 @@ Fast and Feast, kullanıcıların çeşitli yemekleri keşfedip, detaylarını i
 ## Özellikler
 
 - **Ana Sayfa**  
-  Yemekler, iki sütunlu şık bir ızgara görünümünde listelenir.
+  Yemekler, dinamik ve sade bir ızgara düzeninde listelenir .
 
 - **Yemek Detayları**  
   Seçilen yemeğin adı, fiyatı ve görseli detaylı şekilde gösterilir.
