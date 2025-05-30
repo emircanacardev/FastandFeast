@@ -34,7 +34,7 @@ Fast and Feast, kullanıcıların çeşitli yemekleri keşfedip, detaylarını i
 
 ---
 
-Bu projeyi, Kasım Adalan’ın Kotlin Android Bootcamp eğitimini tamamlamak için bitirme projesi olarak hazırladım. Derste öğrendiğimiz tüm konuları topluca uygulamak amacıyla geliştirdim.
+Bu projeyi, Kasım Adalan’ın Kotlin Android Bootcamp eğitimini tamamlamak için bitirme projesi olarak hazırladım.
 
 
 <p align="center">
