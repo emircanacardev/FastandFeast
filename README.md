@@ -25,7 +25,7 @@ Fast and Feast, kullanıcıların çeşitli yemekleri keşfedip, detaylarını i
 ## Kullanılan Teknolojiler
 
 - **Kotlin** — Projenin ana dili  
-- **Android Jetpack Navigation Component** — Kullanıcı deneyimi için gelişmiş navigasyon  
+- **Android Navigation Component** — Kullanıcı deneyimi için gelişmiş navigasyon  
 - **Retrofit & Gson** — API çağrıları ve JSON verisi dönüşümü  
 - **Glide** — Resimlerin hızlı ve verimli yüklenmesi  
 - **Material Design Components** — Modern ve estetik kullanıcı arayüzü  
